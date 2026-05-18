@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Цифровий Навчальний Курс</title>
+    <style>
+        /* Стилі для красивого оформлення сторінки */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #1e3a8a; /* Синій колір */
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #1e3a8a;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 10px;
+        }
+        .welcome-box {
+            background-color: #eff6ff;
+            border-left: 5px solid #3b82f6;
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 4px;
+        }
+        /* Стилізація кнопок-модулів */
+        .modules-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        @media (max-width: 600px) {
+            .modules-grid { grid-template-columns: 1fr; }
+        }
+        .module-card {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            padding: 20px;
+            border-radius: 6px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+        .module-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.05);
+            border-color: #3b82f6;
+        }
+        .module-card h3 {
+            margin-top: 0;
+            color: #2563eb;
+        }
+        .btn-start {
+            background-color: #10b981; /* Зелена кнопка */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn-start:hover { background-color: #059669; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Електронний навчальний курс</h1>
+        <p>Сучасна платформа для підготовки та перевірки знань</p>
+    </header>
+
+    <div class="container">
+        
+        <!-- Блок авторизації студента -->
+        <div class="welcome-box" id="auth-block">
+            <h3>Вітаємо на курсі!</h3>
+            <p>Будь ласка, введіть ваше Прізвище та Ім'я для фіксації результатів у кабінеті викладача:</p>
+            <input type="text" id="student-name" placeholder="Іванов Дмитро" style="padding: 10px; width: 250px; font-size: 16px; margin-right: 10px; border: 1px solid #ccc; border-radius: 4px;">
+            <button class="btn-start" onclick="saveStudentName()">Увійти</button>
+        </div>
+
+        <!-- Привітальне повідомлення після введення імені -->
+        <div class="welcome-box" id="welcome-block" style="display: none;">
+            <h3>Успішний вхід!</h3>
+            <p>Студент: <strong id="display-name"></strong>. Ваш прогрес буде автоматично надіслано викладачу.</p>
+        </div>
+
+        <h2>План навчання (Модулі курсу)</h2>
+        <p>Оберіть тему для вивчення матеріалу та проходження тестування:</p>
+
+        <div class="modules-grid">
+            
+            <!-- Модуль 1 (Посилання веде на сторінку topic1.html) -->
+            <a href="topic1.html" class="module-card">
+                <h3>📘 Модуль 1. Теоретична підготовка</h3>
+                <p>Ознайомлення з базовими поняттями, текстові конспекти, схеми та вбудовані відеолекції.</p>
+            </a>
+
+            <!-- Модуль 2 (Посилання веде на сторінку test1.html) -->
+            <a href="test1.html" class="module-card">
+                <h3>📝 Тестування №1</h3>
+                <p>Перевірка знань за матеріалами першого модуля. Результати автоматично фіксуються.</p>
+            </a>
+
+            <!-- Модуль 3 -->
+            <a href="#" class="module-card" style="opacity: 0.6; cursor: not-allowed;">
+                <h3>🔒 Модуль 2. Практичні завдання</h3>
+                <p>Цей розділ буде доступний після успішного складання першого тесту.</p>
+            </a>
+
+            <!-- Панель результатів -->
+            <a href="results.html" class="module-card">
+                <h3>📊 Кабінет досягнень</h3>
+                <p>Перегляд вашої поточної успішності, відстеження прогресу та генерація фінального звіту.</p>
+            </a>
+
+        </div>
+
+    </div>
+
+    <script>
+        // Простий скрипт для збереження імені в пам'ять браузера (LocalStorage)
+        function saveStudentName() {
+            const nameInput = document.getElementById('student-name').value.trim();
+            if (nameInput === "") {
+                alert("Будь ласка, введіть своє ім'я!");
+                return;
+            }
+            // Записуємо в пам'ять браузера
+            localStorage.setItem('studentName', nameInput);
+            checkAuth();
+        }
+
+        // Перевірка, чи студент вже вводив ім'я раніше
+        function checkAuth() {
+            const savedName = localStorage.getItem('studentName');
+            if (savedName) {
+                document.getElementById('auth-block').style.display = 'none';
+                document.getElementById('welcome-block').style.display = 'block';
+                document.getElementById('display-name').innerText = savedName;
+            }
+        }
+
+        // Запускаємо перевірку при завантаженні сторінки
+        window.onload = checkAuth;
+    </script>
+
+</body>
+</html>
